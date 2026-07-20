@@ -1,8 +1,6 @@
-# RTSP streams
-rtsp_cam1 = "rtsp://username:pass@192.168.1.2:554/stream1"
-rtsp_cam2 = "rtsp://username:pass@192.168.1.12:554/stream1"
-rtsp_cam3 = "rtsp://username:pass@192.168.1.19:554/stream1"
-rtsp_cam4 = "rtsp://username:pass@192.168.1.22:554/stream1"
+import os
+
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp|fflags;nobuffer|flags;low_delay"
 
 import cv2
 import numpy as np
@@ -12,10 +10,13 @@ import time
 # ==========================
 # RTSP URLs
 # ==========================
+rtsp_cam1 = "rtsp://username:pass@192.168.1.2:554/stream1"
+rtsp_cam2 = "rtsp://username:pass@192.168.1.12:554/stream1"
+rtsp_cam3 = "rtsp://username:pass@192.168.1.19:554/stream1"
+rtsp_cam4 = "rtsp://username:pass@192.168.1.22:554/stream1"
 
 tile_w = 640
 tile_h = 360
-
 
 def placeholder(text):
     img = np.zeros((tile_h, tile_w, 3), dtype=np.uint8)
@@ -29,7 +30,6 @@ def placeholder(text):
         2,
     )
     return img
-
 
 class RTSPCamera:
     def __init__(self, url, name):
@@ -53,6 +53,7 @@ class RTSPCamera:
         print(f"[{self.name}] Connecting...")
 
         self.cap = cv2.VideoCapture(self.url, cv2.CAP_FFMPEG)
+        # Setting buffer size to 1 works alongside the environment variables
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
         if self.cap.isOpened():
@@ -63,7 +64,6 @@ class RTSPCamera:
     def update(self):
         """Continuously read frames and reconnect if needed."""
         while self.running:
-
             if self.cap is None or not self.cap.isOpened():
                 self.connect()
                 time.sleep(1)
@@ -89,15 +89,12 @@ class RTSPCamera:
     def stop(self):
         self.running = False
         self.thread.join(timeout=2)
-
         if self.cap is not None:
             self.cap.release()
-
 
 # ==========================
 # Start Cameras
 # ==========================
-
 cam1 = RTSPCamera(rtsp_cam1, "Camera 1")
 cam2 = RTSPCamera(rtsp_cam2, "Camera 2")
 cam3 = RTSPCamera(rtsp_cam3, "Camera 3")
@@ -106,7 +103,6 @@ cam4 = RTSPCamera(rtsp_cam4, "Camera 4")
 # ==========================
 # Window
 # ==========================
-
 window_name = "Security Overwatch 1.0"
 
 cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
@@ -115,34 +111,27 @@ cv2.resizeWindow(window_name, 1280, 720)
 # ==========================
 # Display Loop
 # ==========================
-
 while True:
-
     frame1 = cam1.get_frame()
     frame2 = cam2.get_frame()
-
     frame3 = cam3.get_frame()
     frame4 = cam4.get_frame()
 
     top = np.hstack((frame1, frame2))
     bottom = np.hstack((frame3, frame4))
-
     grid = np.vstack((top, bottom))
 
     cv2.imshow(window_name, grid)
 
     key = cv2.waitKey(1) & 0xFF
-
     if key == ord("q"):
         break
 
 # ==========================
 # Cleanup
 # ==========================
-
 cam1.stop()
 cam2.stop()
 cam3.stop()
 cam4.stop()
-
 cv2.destroyAllWindows()
