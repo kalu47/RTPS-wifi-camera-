@@ -81,7 +81,7 @@ rtsp_cam2 = "rtsp://username:password@192.168.1.12:554/stream1"
 Run:
 
 ```bash
-python main.py
+python RTPS-camera-stream.py
 ```
 
 Press **Q** to exit.
@@ -93,7 +93,7 @@ Press **Q** to exit.
 ```
 security-overwatch/
 │
-├── main.py
+├── RTPS-camera-stream.py
 ├── README.md
 ├── LICENSE
 └── requirements.txt
