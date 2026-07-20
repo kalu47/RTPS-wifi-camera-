@@ -1,4 +1,4 @@
-# RTPS-wifi-camera
+# RTSP-wifi-camera
 
 # 🛡️ Security Overwatch 1.0
 
@@ -68,9 +68,9 @@ pip install opencv-python numpy
 Clone the repository:
 
 ```bash
-git clone https://github.com/kalu47/RTPS-wifi-camera.git
+git clone https://github.com/kalu47/RTSP-wifi-camera.git
 
-cd RTPS-wifi-camera
+cd RTSP-wifi-camera
 ```
 
 Install dependencies:
@@ -83,7 +83,7 @@ pip install -r requirements.txt
 
 ## Configure your cameras
 
-Open `RTPS-camera-stream.py` and replace the example RTSP URLs with your own.
+Open `main.py` and replace the example RTSP URLs with your own.
 
 Example:
 
@@ -107,7 +107,7 @@ To enable RTSP on Tapo cameras:
 ## Running the application
 
 ```bash
-python RTPS-camera-stream.py
+python main.py
 ```
 
 Press **Q** while the window is focused to exit safely.
@@ -117,9 +117,9 @@ Press **Q** while the window is focused to exit safely.
 # Project Structure
 
 ```
-RTPS-wifi-camera/
+RTSP-wifi-camera/
 │
-├── RTPS-camera-stream.py
+├── main.py
 ├── README.md
 ├── requirements.txt
 ├── LICENSE
