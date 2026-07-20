@@ -1,4 +1,5 @@
-# RTPS-wifi-camera-
+# RTPS-wifi-camera
+
 # 🛡️ Security Overwatch 1.0
 
 > Lightweight, low-latency multi-camera RTSP viewer built with Python and OpenCV.
@@ -21,13 +22,14 @@ Designed for Raspberry Pi, home servers, and always-on monitoring stations, it a
 - 🔄 Automatic reconnect when a camera goes offline
 - 📺 Live 2×2 camera grid
 - 💻 Lightweight OpenCV rendering
-- 🏠 Perfect for Raspberry Pi and home server dashboards
+- 🏠 Optimized for Raspberry Pi and home server dashboards
+- 📡 Supports any RTSP-compatible IP camera (Tapo, Hikvision, Dahua, Reolink, etc.)
 
 ---
 
 ## 📷 Screenshot
 
-> *(Add a screenshot here after your first release.)*
+> *Add a screenshot or GIF of the application after your first release.*
 
 ```
 +----------------------+----------------------+
@@ -43,11 +45,17 @@ Designed for Raspberry Pi, home servers, and always-on monitoring stations, it a
 
 # Requirements
 
-- Python 3.9+
+- Python 3.9 or newer
 - OpenCV
 - NumPy
 
 Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Or manually:
 
 ```bash
 pip install opencv-python numpy
@@ -60,73 +68,92 @@ pip install opencv-python numpy
 Clone the repository:
 
 ```bash
-git clone https://github.com/kalu47/RTPS-wifi-camera-
+git clone https://github.com/kalu47/RTPS-wifi-camera.git
 
-cd security-overwatch
+cd RTPS-wifi-camera
 ```
 
-Configure your camera URLs inside `main.py`:
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Configure your cameras
+
+Open `RTPS-camera-stream.py` and replace the example RTSP URLs with your own.
+
+Example:
 
 ```python
 rtsp_cam1 = "rtsp://username:password@192.168.1.2:554/stream1"
 rtsp_cam2 = "rtsp://username:password@192.168.1.12:554/stream1"
 ```
 
-> **Tapo Camera Users**
->
-> Enable RTSP by creating a **Camera Account** inside the Tapo app:
->
-> Settings → Advanced Settings → Camera Account
+### Tapo Camera Users
 
-Run:
+To enable RTSP on Tapo cameras:
+
+1. Open the **Tapo** app.
+2. Select your camera.
+3. Go to **Settings → Advanced Settings → Camera Account**.
+4. Create a camera username and password.
+5. Use those credentials in your RTSP URL.
+
+---
+
+## Running the application
 
 ```bash
 python RTPS-camera-stream.py
 ```
 
-Press **Q** to exit.
+Press **Q** while the window is focused to exit safely.
 
 ---
 
 # Project Structure
 
 ```
-security-overwatch/
+RTPS-wifi-camera/
 │
 ├── RTPS-camera-stream.py
 ├── README.md
+├── requirements.txt
 ├── LICENSE
-└── requirements.txt
+└── .gitignore
 ```
 
 ---
 
 # Performance
 
-The application minimizes latency by:
+Security Overwatch minimizes RTSP latency by:
 
 - Disabling FFmpeg buffering
-- Using TCP transport
-- Running each camera in its own thread
-- Continuously reading the newest frame
-- Automatically reconnecting when streams fail
+- Forcing TCP transport for stable streaming
+- Running every camera on its own dedicated thread
+- Continuously reading only the newest available frame
+- Automatically reconnecting if a camera disconnects
 
-This keeps the display as close to real time as possible.
+This keeps camera feeds as close to real-time as possible while remaining lightweight enough for Raspberry Pi and low-power home servers.
 
 ---
 
 # Customization
 
-### Change Grid Size
+## Change Grid Size
 
-The display uses:
+The display grid is generated using:
 
 ```python
 np.hstack()
 np.vstack()
 ```
 
-You can modify these to support:
+You can easily modify the layout to display:
 
 - 2 Cameras
 - 4 Cameras
@@ -136,13 +163,14 @@ You can modify these to support:
 
 ---
 
-### Reduce CPU Usage
+## Reduce CPU Usage
 
-If running on older hardware:
+If you're using older hardware:
 
-- Reduce tile resolution
-- Use camera substreams (`stream2`)
-- Lower the camera FPS
+- Reduce the tile resolution.
+- Switch from `stream1` to the lower-resolution `stream2`.
+- Lower the camera FPS.
+- Reduce the number of simultaneously displayed cameras.
 
 ---
 
@@ -150,26 +178,26 @@ If running on older hardware:
 
 ## Stream is delayed
 
-Use the substream:
+If your stream falls behind real time, switch to your camera's substream.
 
 ```
 stream1 → Full Resolution
-stream2 → Low Resolution
+stream2 → Lower Resolution (Recommended)
 ```
 
-Substreams greatly reduce CPU decoding load.
+Substreams require significantly less decoding power and help maintain smooth, low-latency playback.
 
 ---
 
 ## Camera Offline
 
-Security Overwatch automatically:
+If a camera disconnects, Security Overwatch will:
 
-- Detects disconnects
-- Displays a placeholder
-- Reconnects automatically
+- Detect the connection loss
+- Display a placeholder frame
+- Continuously attempt to reconnect
 
-No restart required.
+No application restart is required.
 
 ---
 
@@ -177,25 +205,27 @@ No restart required.
 
 - [ ] Motion detection
 - [ ] Snapshot capture
-- [ ] Recording support
+- [ ] Video recording
+- [ ] Hardware-accelerated decoding
 - [ ] Web dashboard
-- [ ] Hardware acceleration
-- [ ] Docker image
 - [ ] ONVIF camera discovery
+- [ ] Docker support
+- [ ] Full-screen kiosk mode
+- [ ] Configuration file support (JSON/YAML)
 
 ---
 
 # Contributing
 
-Contributions are welcome.
+Contributions are always welcome!
 
-Feel free to open an Issue or submit a Pull Request.
+If you find a bug, have a feature request, or would like to improve the project, feel free to open an Issue or submit a Pull Request.
 
 ---
 
 # License
 
-Released under the MIT License.
+This project is released under the **MIT License**.
 
 ---
 
