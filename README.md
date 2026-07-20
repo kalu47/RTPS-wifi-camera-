@@ -60,7 +60,7 @@ pip install opencv-python numpy
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/security-overwatch.git
+git clone https://github.com/kalu47/RTPS-wifi-camera-
 
 cd security-overwatch
 ```
